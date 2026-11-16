@@ -1,0 +1,6 @@
+{
+  "name": "Naeleseneh Properties Limited",
+  "description": "Real estate directory and property services for Naeleseneh Properties Limited (Philo Eseneh & Co) — buying, selling, renting, and leasing landed properties.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
