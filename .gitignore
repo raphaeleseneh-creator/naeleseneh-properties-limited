@@ -2,7 +2,38 @@ node_modules/
 build/
 dist/
 coverage/
+.aistudio/
+.agents/
+.codex/
+.aws/
+tmp/
 .DS_Store
 *.log
 .env*
 !.env.example
+
+# Credentials, signing keys, and certificates
+*.pem
+*.key
+*.p12
+*.pfx
+*.jks
+*.keystore
+id_rsa*
+id_ed25519*
+credentials*
+secrets*
+
+# Local databases, exports, and backups
+*.db
+*.sqlite
+*.sqlite3
+*.sql
+*.dump
+*.bak
+*.backup
+
+# Local package and deployment credentials
+.npmrc
+.pypirc
+.netrc

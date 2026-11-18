@@ -1,5 +1,5 @@
 import React from 'react';
-import { ArrowUpRight } from 'lucide-react';
+import { ArrowUpRight, MapPin } from 'lucide-react';
 import { useAppState } from '../context/AppStateContext';
 import { BrandLogo } from './BrandLogo';
 
@@ -145,20 +145,30 @@ export const SiteFooter: React.FC = () => {
             </h2>
             <div className="space-y-2 text-sm text-slate-400">
               {siteConfig.contact.addressVerified ? (
-                <p>{siteConfig.contact.officeAddress}</p>
+                <p>
+                  <a
+                    href={siteConfig.contact.mapDirectionsUrl}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="hover:text-white transition-colors"
+                    aria-label="Locate Naeleseneh Properties office on Google Maps"
+                  >
+                    {siteConfig.contact.officeAddress}
+                  </a>
+                </p>
               ) : (
                 <p>Office address awaiting verified client details.</p>
               )}
-              {siteConfig.contact.phoneVerified && siteConfig.contact.phoneHref && (
-                <p>
+              {siteConfig.contact.phoneNumbers.map((phone) => (
+                <p key={phone.href}>
                   <a
-                    href={siteConfig.contact.phoneHref}
-                    className="text-slate-200 hover:text-white transition-colors"
+                    href={phone.href}
+                    className="text-slate-200 hover:text-white transition-colors tabular-nums"
                   >
-                    {siteConfig.contact.phoneDisplay}
+                    {phone.display}
                   </a>
                 </p>
-              )}
+              ))}
               {siteConfig.contact.emailVerified && siteConfig.contact.emailHref && (
                 <p>
                   <a
@@ -170,13 +180,24 @@ export const SiteFooter: React.FC = () => {
                 </p>
               )}
             </div>
-            <div className="pt-2">
+            <div className="pt-2 flex flex-wrap gap-2">
               <a
                 href="/contact"
                 onClick={(e) => handleNav(e, '/contact')}
                 className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-[#1E40AF] text-white text-xs font-semibold hover:bg-[#1D4ED8] transition-colors"
               >
                 <span>Make an Enquiry</span>
+                <ArrowUpRight className="w-3.5 h-3.5" aria-hidden="true" />
+              </a>
+              <a
+                href={siteConfig.contact.mapDirectionsUrl}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="inline-flex items-center gap-2 rounded-full border border-slate-700 px-4 py-2 text-xs font-semibold text-white transition-colors hover:border-slate-500 hover:bg-slate-900"
+                aria-label="Locate Naeleseneh Properties office on Google Maps"
+              >
+                <MapPin className="w-3.5 h-3.5" aria-hidden="true" />
+                <span>Locate Us</span>
                 <ArrowUpRight className="w-3.5 h-3.5" aria-hidden="true" />
               </a>
             </div>

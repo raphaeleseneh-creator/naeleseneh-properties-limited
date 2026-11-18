@@ -9,18 +9,17 @@ export interface SiteConfig {
     logoUrl?: string; // Set to '/assets/naeleseneh-logo.png' when supplied
   };
   contact: {
-    phoneVerified: boolean;
-    phoneDisplay: string;
-    phoneHref?: string;
+    phoneNumbers: {
+      display: string;
+      href: string;
+      whatsappNumber: string;
+    }[];
     emailVerified: boolean;
     emailDisplay: string;
     emailHref?: string;
     addressVerified: boolean;
     officeAddress: string;
     officeHours: string;
-    whatsappVerified: boolean;
-    whatsappNumber?: string;
-    whatsappLabel: string;
     socialLinks: {
       label: string;
       url?: string;
@@ -28,6 +27,7 @@ export interface SiteConfig {
     }[];
     mapEmbedVerified: boolean;
     mapEmbedUrl?: string;
+    mapDirectionsUrl: string;
   };
   services: {
     showSourcingAndConsultancy: boolean;
@@ -51,27 +51,36 @@ export const INITIAL_SITE_CONFIG: SiteConfig = {
     tradingName: 'Philo Eseneh & Co',
     rcNumber: 'RC 8154311',
     tagline: 'Explore land and properties for sale, rent, and lease.',
-    logoUrl: undefined,
+    logoUrl: '/assets/brand/naeleseneh-properties-logo.jpg',
   },
   contact: {
-    phoneVerified: false,
-    phoneDisplay: 'Official telephone number awaiting client verification',
-    phoneHref: undefined,
-    emailVerified: false,
-    emailDisplay: 'Official contact email awaiting client verification',
-    emailHref: undefined,
-    addressVerified: false,
-    officeAddress: 'Official office address awaiting client verification',
+    phoneNumbers: [
+      {
+        display: '0803 344 3794',
+        href: 'tel:+2348033443794',
+        whatsappNumber: '2348033443794',
+      },
+      {
+        display: '0811 211 2000',
+        href: 'tel:+2348112112000',
+        whatsappNumber: '2348112112000',
+      },
+    ],
+    emailVerified: true,
+    emailDisplay: 'philoeseneh@yahoo.com',
+    emailHref: 'mailto:philoeseneh@yahoo.com',
+    addressVerified: true,
+    officeAddress: 'F74, Road 2, Ikota Shopping Complex, Lagos, Nigeria',
     officeHours: 'Monday – Friday, 9:00 AM – 5:00 PM WAT (Provisional)',
-    whatsappVerified: false,
-    whatsappNumber: undefined,
-    whatsappLabel: 'WhatsApp link activates once official number is supplied',
     socialLinks: [
       { label: 'Instagram', url: undefined, verified: false },
       { label: 'LinkedIn', url: undefined, verified: false },
     ],
-    mapEmbedVerified: false,
-    mapEmbedUrl: undefined,
+    mapEmbedVerified: true,
+    mapEmbedUrl:
+      'https://www.google.com/maps?q=F74%2C%20Road%202%2C%20Ikota%20Shopping%20Complex%2C%20Lagos%2C%20Nigeria&output=embed',
+    mapDirectionsUrl:
+      'https://www.google.com/maps/search/?api=1&query=F74%2C%20Road%202%2C%20Ikota%20Shopping%20Complex%2C%20Lagos%2C%20Nigeria',
   },
   services: {
     // Configurable: enable after client confirms Property Sourcing & Advisory Consultancy copy

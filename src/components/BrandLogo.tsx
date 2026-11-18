@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { INITIAL_SITE_CONFIG } from '../config/siteConfig';
 import { useAppState } from '../context/AppStateContext';
 
 interface BrandLogoProps {
@@ -8,17 +9,37 @@ interface BrandLogoProps {
 
 export const BrandLogo: React.FC<BrandLogoProps> = ({ variant = 'header', inverted = false }) => {
   const { siteConfig } = useAppState();
-  const [imgFailed, setImgFailed] = useState(false);
+  const [failedUrls, setFailedUrls] = useState<string[]>([]);
+  const defaultLogoUrl = INITIAL_SITE_CONFIG.company.logoUrl;
+  const configuredLogoUrl = siteConfig.company.logoUrl;
+  const logoUrl = configuredLogoUrl && !failedUrls.includes(configuredLogoUrl)
+    ? configuredLogoUrl
+    : defaultLogoUrl;
+  const isDefaultLogo = logoUrl === defaultLogoUrl;
 
-  if (siteConfig.company.logoUrl && !imgFailed) {
+  if (logoUrl && !failedUrls.includes(logoUrl)) {
     return (
-      <span className="inline-flex items-center gap-2.5 shrink-0">
-        <img
-          src={siteConfig.company.logoUrl}
-          alt="Naeleseneh Properties Limited logo"
-          className="h-9 w-auto object-contain"
-          onError={() => setImgFailed(true)}
-        />
+      <span
+        className={`block shrink-0 ${inverted ? 'rounded-lg bg-white p-2' : 'bg-white'}`}
+      >
+        <span
+          className={`relative block aspect-[4/1] overflow-hidden ${
+            variant === 'header' ? 'w-44 sm:w-48' : 'w-60'
+          }`}
+        >
+          <img
+            src={logoUrl}
+            alt="Naeleseneh Properties Limited — Philo Eseneh & Co."
+            width={isDefaultLogo ? 1600 : undefined}
+            height={isDefaultLogo ? 533 : undefined}
+            className={
+              isDefaultLogo
+                ? 'absolute left-1/2 top-1/2 h-auto w-[116%] max-w-none -translate-x-1/2 -translate-y-1/2'
+                : 'h-full w-full object-contain'
+            }
+            onError={() => setFailedUrls((urls) => [...urls, logoUrl])}
+          />
+        </span>
       </span>
     );
   }

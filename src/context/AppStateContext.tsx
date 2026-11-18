@@ -16,7 +16,7 @@ interface SessionStateSnapshot {
   isStaffDemoSignedIn: boolean;
 }
 
-const SESSION_KEY = 'naeleseneh_preview_session_v1';
+const SESSION_KEY = 'naeleseneh_preview_session_v2';
 
 function loadInitialSession(): SessionStateSnapshot {
   if (typeof window !== 'undefined') {
@@ -36,6 +36,13 @@ function loadInitialSession(): SessionStateSnapshot {
             ? {
                 ...INITIAL_SITE_CONFIG,
                 ...parsed.siteConfig,
+                contact: {
+                  ...INITIAL_SITE_CONFIG.contact,
+                  ...parsed.siteConfig.contact,
+                  phoneNumbers:
+                    parsed.siteConfig.contact?.phoneNumbers ??
+                    INITIAL_SITE_CONFIG.contact.phoneNumbers,
+                },
                 services: {
                   ...INITIAL_SITE_CONFIG.services,
                   ...parsed.siteConfig.services,

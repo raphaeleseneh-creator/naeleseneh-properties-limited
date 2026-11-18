@@ -1,5 +1,5 @@
 import React, { useEffect, useId, useState } from 'react';
-import { CheckCircle2, Info } from 'lucide-react';
+import { CheckCircle2, Mail } from 'lucide-react';
 import { useAppState } from '../context/AppStateContext';
 import { trackAnalyticsEvent } from '../lib/analytics';
 import { validateContactForm, type ValidationErrors } from '../utils/propertyFilters';
@@ -21,7 +21,7 @@ export const EnquiryForm: React.FC<EnquiryFormProps> = ({
   sourcePage = 'contact',
   onModeChange,
 }) => {
-  const { addEnquiry } = useAppState();
+  const { addEnquiry, siteConfig } = useAppState();
   const baseId = useId();
 
   const [name, setName] = useState('');
@@ -70,6 +70,27 @@ export const EnquiryForm: React.FC<EnquiryFormProps> = ({
     }
 
     setSubmittedRef(created.id);
+
+    if (siteConfig.contact.emailVerified && siteConfig.contact.emailHref) {
+      const subject = `${mode}${propertyRef ? ` — ${propertyRef}` : ''}`;
+      const body = [
+        `Name: ${name.trim()}`,
+        `Phone: ${phone.trim()}`,
+        `Email: ${email.trim()}`,
+        propertyRef ? `Property reference: ${propertyRef.trim()}` : '',
+        propertyTitle ? `Property: ${propertyTitle.trim()}` : '',
+        mode === 'Inspection Request' ? `Preferred timeframe: ${preferredWindow}` : '',
+        '',
+        message.trim(),
+      ]
+        .filter((line) => line !== '')
+        .join('\n');
+
+      window.location.href = `${siteConfig.contact.emailHref}?subject=${encodeURIComponent(
+        subject
+      )}&body=${encodeURIComponent(body)}`;
+    }
+
     setName('');
     setEmail('');
     setPhone('');
@@ -108,11 +129,11 @@ export const EnquiryForm: React.FC<EnquiryFormProps> = ({
       )}
 
       <div className="mb-5 flex items-start gap-2.5 rounded-xl bg-[#EFF6FF] border border-blue-200/70 p-3.5 text-xs sm:text-sm text-slate-700">
-        <Info className="w-4 h-4 text-[#1E40AF] shrink-0 mt-0.5" aria-hidden="true" />
+        <Mail className="w-4 h-4 text-[#1E40AF] shrink-0 mt-0.5" aria-hidden="true" />
         <div>
-          <p className="font-semibold text-slate-900">Demo preview only — use sample details</p>
+          <p className="font-semibold text-slate-900">Send your enquiry by email</p>
           <p className="mt-0.5 text-slate-600">
-            Submitting this form saves a preview entry to the temporary Staff Inbox in your browser session; no live message or email is sent.
+            Submit the form to prepare a message to {siteConfig.contact.emailDisplay} in your email app. Review it there, then press send.
           </p>
         </div>
       </div>
@@ -142,18 +163,18 @@ export const EnquiryForm: React.FC<EnquiryFormProps> = ({
             <div>
               <h4 className="text-base font-bold text-slate-900">
                 {mode === 'Inspection Request'
-                  ? 'Inspection request recorded (Demo preview)'
-                  : 'Enquiry recorded (Demo preview)'}
+                  ? 'Inspection request prepared'
+                  : 'Enquiry email prepared'}
               </h4>
               <p className="mt-1 text-sm text-slate-700">
-                Demo preview notice: <strong>No message was sent</strong> because backend email delivery is not connected yet. Your sample submission ({submittedRef}) is now visible in the Staff Portal Inbox preview for this session.
+                Your email app should now be open with the details filled in. Review the message and press send to deliver it to our team. Reference: {submittedRef}.
               </p>
               <button
                 type="button"
                 onClick={() => setSubmittedRef(null)}
                 className="mt-4 inline-flex items-center px-4 py-2 rounded-lg border border-slate-300 bg-white text-sm font-semibold text-slate-800 hover:border-[#1E40AF] hover:text-[#1E40AF] transition-colors"
               >
-                Submit another sample enquiry
+                Prepare another enquiry
               </button>
             </div>
           </div>
@@ -295,8 +316,8 @@ export const EnquiryForm: React.FC<EnquiryFormProps> = ({
             className="w-full sm:w-auto px-6 py-3 rounded-full bg-[#1E40AF] text-white text-sm font-semibold hover:bg-[#17358F] transition-colors cursor-pointer"
           >
             {mode === 'Inspection Request'
-              ? 'Request Inspection (Demo)'
-              : 'Send Enquiry (Demo)'}
+              ? 'Prepare Inspection Request'
+              : 'Prepare Email Enquiry'}
           </button>
         </form>
       )}
